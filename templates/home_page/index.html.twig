@@ -1,14 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomePageController!{% endblock %}
+{% block title %}Homepage{% endblock %}
 
 {% block body %}
 <main role="main">
       <div class="jumbotron">
         <div class="container">
           <h1 class="display-3">Главная страница</h1>
-          <h5>Когда-нибудь тут будут новости.</h5>
-            </div>
+        </div>
       </div>
     </main>
+<div class="jumbotron mx-auto" style="width: 100%; font-size: 150%">
+            <table class="table-striped mx-auto"  style="width: 1500px;">
+              <tr>
+                <th style="width: 20%; ">Название</th>
+                <th style="width: 40%;">Аннотация</th>
+                <th style="width: 15%;">Просмотры</th>
+                <th style="width: 25%;">Время Добавления</th>
+              </tr>
+{% for article in articles %}
+              <tr>
+                <td >
+                    <a href="{{ path('article_show', {'id': article.id}) }}" style ="color: #4a4a4a;">{{ article.title }}</a>
+                </td>
+                <td >{{ article.annotation }}</td>
+                <td >{{ article.views }}</td>
+                <td >{{ article.artDateTime ? article.artDateTime|date('Y-m-d H:i:s') : '' }}</td>
+                
+              </tr>
+        {% else %}
+            <div class="container"> colspan="7">no records found</div>
+        {% endfor %}   
+    </table> 
+</div> 
 {% endblock %}

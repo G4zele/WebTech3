@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -46,6 +48,25 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $surName;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="userRel", orphanRemoval=true)
+     */
+    private $commRel;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="userRel", orphanRemoval=true)
+     */
+    private $articleRel;
+
+    public function __construct()
+    {
+        $this->commRel = new ArrayCollection();
+        $this->articleRel = new ArrayCollection();
+    }
+
+    
+
 
     public function getId(): ?int
     {
@@ -151,4 +172,70 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getCommRel(): Collection
+    {
+        return $this->commRel;
+    }
+
+    public function addCommRel(Comment $commRel): self
+    {
+        if (!$this->commRel->contains($commRel)) {
+            $this->commRel[] = $commRel;
+            $commRel->setUserRel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommRel(Comment $commRel): self
+    {
+        if ($this->commRel->removeElement($commRel)) {
+            // set the owning side to null (unless already changed)
+            if ($commRel->getUserRel() === $this) {
+                $commRel->setUserRel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Article[]
+     */
+    public function getArticleRel(): Collection
+    {
+        return $this->articleRel;
+    }
+
+    public function addArticleRel(Article $articleRel): self
+    {
+        if (!$this->articleRel->contains($articleRel)) {
+            $this->articleRel[] = $articleRel;
+            $articleRel->setUserRel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticleRel(Article $articleRel): self
+    {
+        if ($this->articleRel->removeElement($articleRel)) {
+            // set the owning side to null (unless already changed)
+            if ($articleRel->getUserRel() === $this) {
+                $articleRel->setUserRel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->email;
+    }
+
 }

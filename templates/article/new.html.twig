@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Article{% endblock %}
+
+{% block body %}
+    <div class="mx-auto"style="width:90%" >
+    <h1>Новая Статья</h1>
+    {{ include('article/_form.html.twig') }}
+    </div>
+{% endblock %}
